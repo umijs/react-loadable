@@ -2,10 +2,14 @@
 
 > A higher order component for loading components with dynamic imports.
 
+[![Build Status](https://travis-ci.org/umijs/react-loadable.svg?branch=master)](https://travis-ci.org/umijs/react-loadable)
+
+forked by [react-loadable](https://github.com/jamiebuilds/react-loadable).
+
 ## Install
 
 ```sh
-yarn add react-loadable
+yarn add @umijs/react-loadable
 ```
 
 ## Example
