@@ -256,10 +256,7 @@ function createLoadableComponent(loadFn, options) {
           retry: this.retry
         });
       } else if (this.state.loaded) {
-        return opts.render(this.state.loaded, {
-          ...this.props,
-          ...this.state.moduleProps,
-        });
+        return opts.render(this.state.loaded, Object.assign({}, this.props, this.state.moduleProps));
       } else {
         return null;
       }
