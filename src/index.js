@@ -158,6 +158,35 @@ function createLoadableComponent(loadFn, options) {
       return init();
     }
 
+    async componentDidMount() {
+      const { history } = this.props;
+      // flag in umi SSR
+      if (window.g_useSSR) {
+        window.onpopstate = () => {
+          this.getInitialProps();
+        };
+      }
+      if (history.action !== 'POP') {
+        this.getInitialProps();
+      }
+    }
+
+    // 前端路由切换时，也需要执行 getInitialProps
+    async getInitialProps() {
+      // the values may be different with findRoute.js
+      const { match, location, ...restProps } = this.props;
+      const WrappedComponent = this.state.loaded
+      const extraProps = (WrappedComponent && WrappedComponent.default.getInitialProps) ? await WrappedComponent.default.getInitialProps({
+        isServer: false,
+        route: match,
+        location,
+        ...restProps,
+      }) : {};
+      this.setState({
+        extraProps,
+      });
+    }
+
     componentWillMount() {
       this._mounted = true;
       this._loadModule();
@@ -254,6 +283,7 @@ function createLoadableComponent(loadFn, options) {
         return opts.render(this.state.loaded, {
           ...this.props,
           ...this.state.moduleProps,
+          ...this.state.extraProps,
         });
       } else {
         return null;
