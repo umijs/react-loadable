@@ -224,17 +224,6 @@ function createLoadableComponent(loadFn, options) {
       this._clearTimeouts();
     }
 
-    async getInitialProps () {
-      // csr首次进入页面以及csr/ssr切换路由时才调用getInitialProps
-      const props = this.props
-      const WrappedComponent = this.state.loaded
-      debugger;
-      const extraProps = (WrappedComponent && WrappedComponent.default.getInitialProps) ? await WrappedComponent.default.getInitialProps(props) : {}
-      this.setState({
-        extraProps,
-      })
-    }
-
     _clearTimeouts() {
       clearTimeout(this._delay);
       clearTimeout(this._timeout);
