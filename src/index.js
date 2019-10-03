@@ -207,7 +207,12 @@ function createLoadableComponent(loadFn, options) {
       res.promise
         .then(async Module => {
           if (Module.default && Module.default.getInitialProps) {
-            const moduleProps = await Module.default.getInitialProps(this.props)
+            const { match, location } = this.props;
+            const moduleProps = await Module.default.getInitialProps({
+              isServer: false,
+              route: match,
+              location,
+            })
             this.setState({
               moduleProps,
             })
