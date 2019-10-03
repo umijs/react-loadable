@@ -166,7 +166,7 @@ function createLoadableComponent(loadFn, options) {
           this.getInitialProps();
         };
       }
-      if (history.action !== 'POP') {
+      if (history && history.action !== 'POP') {
         this.getInitialProps();
       }
     }
