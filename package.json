@@ -1,11 +1,11 @@
 {
-  "name": "react-loadable",
-  "version": "5.5.0",
+  "name": "@umijs/react-loadable",
+  "version": "1.0.0",
   "description": "A higher order component for loading components with promises",
   "main": "lib/index.js",
-  "author": "James Kyle <me@thejameskyle.com>",
+  "author": "ycjcl868 <45808948@qq.com>",
   "license": "MIT",
-  "repository": "thejameskyle/react-loadable",
+  "repository": "umijs/react-loadable",
   "files": [
     "babel.js",
     "webpack.js",
@@ -15,7 +15,7 @@
     "test": "jest --coverage",
     "build": "babel src -d lib",
     "start": "yarn build && webpack && babel-node example/server.js",
-    "prepublish": "yarn build"
+    "prepublishOnly": "yarn build"
   },
   "dependencies": {
     "prop-types": "^15.5.0"
@@ -28,6 +28,7 @@
     "babel-plugin-transform-async-to-generator": "^6.24.1",
     "babel-plugin-transform-class-properties": "^6.24.1",
     "babel-plugin-transform-object-assign": "^6.22.0",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-react": "^6.24.1",
     "express": "^4.16.1",

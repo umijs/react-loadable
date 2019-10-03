@@ -205,8 +205,20 @@ function createLoadableComponent(loadFn, options) {
       };
 
       res.promise
-        .then(() => {
-          update();
+        .then(async Module => {
+          if (Module.default && Module.default.getInitialProps) {
+            const { match, location, ...restProps } = this.props;
+            const moduleProps = await Module.default.getInitialProps( {
+              isServer: false,
+              route: match,
+              location,
+              ...restProps,
+            })
+            this.setState({
+              moduleProps,
+            })
+          }
+          update()
         })
         .catch(err => {
           update();
@@ -239,7 +251,10 @@ function createLoadableComponent(loadFn, options) {
           retry: this.retry
         });
       } else if (this.state.loaded) {
-        return opts.render(this.state.loaded, this.props);
+        return opts.render(this.state.loaded, {
+          ...this.props,
+          ...this.state.moduleProps,
+        });
       } else {
         return null;
       }
