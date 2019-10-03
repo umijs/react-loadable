@@ -205,8 +205,14 @@ function createLoadableComponent(loadFn, options) {
       };
 
       res.promise
-        .then(() => {
-          update();
+        .then(async Module => {
+          if (Module.default && Module.default.getInitialProps) {
+            const moduleProps = await Module.default.getInitialProps(this.props)
+            this.setState({
+              moduleProps,
+            })
+          }
+          update()
         })
         .catch(err => {
           update();
@@ -216,6 +222,17 @@ function createLoadableComponent(loadFn, options) {
     componentWillUnmount() {
       this._mounted = false;
       this._clearTimeouts();
+    }
+
+    async getInitialProps () {
+      // csr首次进入页面以及csr/ssr切换路由时才调用getInitialProps
+      const props = this.props
+      const WrappedComponent = this.state.loaded
+      debugger;
+      const extraProps = (WrappedComponent && WrappedComponent.default.getInitialProps) ? await WrappedComponent.default.getInitialProps(props) : {}
+      this.setState({
+        extraProps,
+      })
     }
 
     _clearTimeouts() {
@@ -239,7 +256,10 @@ function createLoadableComponent(loadFn, options) {
           retry: this.retry
         });
       } else if (this.state.loaded) {
-        return opts.render(this.state.loaded, this.props);
+        return opts.render(this.state.loaded, {
+          ...this.props,
+          ...this.state.moduleProps,
+        });
       } else {
         return null;
       }
